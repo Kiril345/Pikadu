@@ -31,11 +31,15 @@ const editUsername = document.querySelector('.edit-username');
 const editPhoto = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
 const postsWrapper = document.querySelector('.posts');
+const postElem = document.querySelector('.post');
 const loginError = document.querySelector('.login-error');
 const buttonNewPost = document.querySelector('.new-post-btn');
 const addPostElem = document.querySelector('.add-post');
 const errorText = document.querySelector('.error-text');
 const loginForgetElem = document.querySelector('.login-forget');
+//const likesElem = document.querySelector('.likes');
+const likesCounter = document.querySelector('.likes-counter');
+
 
 const setUsers = {
   user: null,
@@ -71,8 +75,9 @@ const setUsers = {
       console.log(err);
     })  
   },
-  logOut() {
+  logOut(handler) {
     firebase.auth().signOut();
+    handler();
   },
   signUp(email, password, handler) {
     if (!regExpValidEmail.test(email)) { 
@@ -132,7 +137,6 @@ const setPosts = {
   allPosts: [],
   
   addPost(title, text, tags, handler) {
-    
     this.allPosts.unshift({
       id: `${(+new Date()).toString(16)}-${setUsers.user.uid}`,
       title,
@@ -143,7 +147,8 @@ const setPosts = {
         photo: setUsers.user.photoURL,
       },
       date: new Date().toLocaleDateString(),
-      like: 0,
+      like: 0, 
+      likesUsers: [1234],    
       comments: 0,
     })
     firebase.database().ref('post').set(this.allPosts)
@@ -156,18 +161,44 @@ const setPosts = {
       console.log(this.allPosts)
       handler();
     })
+  },
+  addLikes(event) {
+    const target = event.target;
+    const likesElem = target.closest('.likes');
+
+    if(likesElem) {
+      const post = target.closest('.post');
+      const id = post.id;
+      const likePost = setPosts.allPosts.find(item => item.id == id);
+      const indexPost = setPosts.allPosts.findIndex(item => item.id == id);
+      const userLike = likePost.likesUsers.find(item => item == setUsers.user.uid);
+      if(!userLike) {
+        likePost.like += 1;
+        likePost.likesUsers.unshift(setUsers.user.uid);
+        firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
+        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers); 
+      }
+      if(userLike) {
+        likePost.like -= 1;
+        firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
+        const userDisLike = likePost.likesUsers.findIndex(item => item == setUsers.user.uid);
+        likePost.likesUsers.splice(userDisLike, 1);
+        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
+      }
+    }
   }
 };
+
 
 
 
 const showAllPosts = () => { //ренедерим все посты
   let postsHTML = '';
 
-  setPosts.allPosts.forEach(({title, text, date, like, tags, author, comments}) => {
+  setPosts.allPosts.forEach(({id, title, text, tags, author, date, like, comments}) => {
 
   postsHTML += `
-  <section class="post">
+  <section class="post" id=${id}>
     <div class="post-body">
       <h2 class="post-title">${title}</h2>
       <p class="post-text">${text}</p>
@@ -221,7 +252,7 @@ const showAllPosts = () => { //ренедерим все посты
 
 const toggleAuthDom = () => {
   const user = setUsers.user;
-  console.log('user', user);
+  console.log(user);
   loginError.innerHTML = '';
 
   if (user) {
@@ -230,14 +261,12 @@ const toggleAuthDom = () => {
     userNameElem.textContent = user.displayName;
     userAvatarElem.src = user.photoURL || 'img/avatar.svg';
     buttonNewPost.classList.add('visible');
-
   } else {
     loginElem.style.display = ''
     userElem.classList.remove('visible');
     buttonNewPost.classList.remove('visible');
     addPostElem.classList.remove('visible');
-    //postsWrapper.classList.add('visible');
-    
+    postsWrapper.classList.remove('hide'); 
   }
 };
 
@@ -257,7 +286,7 @@ const init = () => {
 
   exitElem.addEventListener('click', event => {
     event.preventDefault();
-    setUsers.logOut();
+    setUsers.logOut(toggleAuthDom);
   });
   
 
@@ -304,13 +333,13 @@ const init = () => {
     console.log(title, text, tags);
     if (title.value.length < 6 ) {
       errorText.innerHTML += `<div class="error-title">слишком короткий заголовок</div>`;
-      setTimeout(() => errorText.innerHTML = '', 2000);
+      timer();
       return;
     }
 
     if (text.value.length < 100 ) {
       errorText.innerHTML += `<div class="error-title">слишком короткий текст</div>`;
-      setTimeout(() => errorText.innerHTML = '', 2000);
+      timer();
       return;
     }
 
@@ -324,9 +353,25 @@ const init = () => {
       setUsers.sendForget(emailInput.value)
     } else {
       loginError.innerHTML = 'для восстановления пароля введите email';
-      return;
     }
   });
+
+  postsWrapper.addEventListener('click', event => {
+    if (setUsers.user !=null) {
+      setPosts.addLikes(event)
+    } else { 
+      errorText.innerHTML += `<div class="error-title">выполните вход на сайт</div>`;
+      timer();
+
+    }
+  });
+
+  function timer() {
+    setTimeout(() => errorText.innerHTML = '', 2000);
+  }
+    //event.preventDefault();
+    //setUsers
+  //})
 
 
   // отслеживаем клик по кнопке меню и запускаем функцию 
