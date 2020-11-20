@@ -223,7 +223,7 @@ body {
 .login-error{
   display: block;
   width: 100%;
-  height: 20px;
+  height: auto;
   color: #fb0505;
   font-size: 13px;
   padding: 3px;
