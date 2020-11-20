@@ -381,6 +381,7 @@ const init = () => {
     event.preventDefault(); 
     addPostElem.classList.remove('visible');
     postsWrapper.classList.remove('hide');
+    menu.classList.remove('visible');
 
   })
 
