@@ -37,7 +37,6 @@ const buttonNewPost = document.querySelector('.new-post-btn');
 const addPostElem = document.querySelector('.add-post');
 const errorText = document.querySelector('.error-text');
 const loginForgetElem = document.querySelector('.login-forget');
-//const likesElem = document.querySelector('.likes');
 const likesCounter = document.querySelector('.likes-counter');
 
 
@@ -324,6 +323,7 @@ const init = () => {
     event.preventDefault();
     addPostElem.classList.add('visible');
     postsWrapper.classList.add('hide');
+    menu.classList.toggle('visible');
   });
 
 
@@ -369,16 +369,10 @@ const init = () => {
   function timer() {
     setTimeout(() => errorText.innerHTML = '', 2000);
   }
-    //event.preventDefault();
-    //setUsers
-  //})
 
 
-  // отслеживаем клик по кнопке меню и запускаем функцию 
   menuToggle.addEventListener('click', event => {
-  // отменяем стандартное поведение ссылки
-  event.preventDefault();
-  // вешаем класс на меню, когда кликнули по кнопке меню 
+  event.preventDefault(); 
   menu.classList.toggle('visible');
   });
 

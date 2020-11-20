@@ -559,13 +559,19 @@ body {
     width: 100%;
     background-color: #fff;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.15);
-    padding: 30px;
+    padding: 15px;
     transform: translateX(100%);
     transition: transform 0.2s;
     overflow-y: auto;
   }
   .sidebar.visible {
     transform: translateX(0);
+  }
+  .user{
+    padding: 15px;
+  }
+  .card-body{
+    padding: 15px;
   }
   .header-nav {
     display: none;
