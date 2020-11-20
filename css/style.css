@@ -567,6 +567,16 @@ body {
   .sidebar.visible {
     transform: translateX(0);
   }
+  .login{
+    padding: 15px;
+  }
+  .login-forget{
+    margin-bottom: 15px;
+    font-size: 13px;
+  }
+  .card-header{
+    text-align: center;
+  }
   .user{
     padding: 15px;
   }
