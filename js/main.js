@@ -31,13 +31,14 @@ const editUsername = document.querySelector('.edit-username');
 const editPhoto = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
 const postsWrapper = document.querySelector('.posts');
-const postElem = document.querySelector('.post');
+//const postElem = document.querySelector('.post');
 const loginError = document.querySelector('.login-error');
 const buttonNewPost = document.querySelector('.new-post-btn');
 const addPostElem = document.querySelector('.add-post');
 const errorText = document.querySelector('.error-text');
 const loginForgetElem = document.querySelector('.login-forget');
 const likesCounter = document.querySelector('.likes-counter');
+const logoElem = document.querySelector('.header-logo');
 
 
 const setUsers = {
@@ -375,6 +376,13 @@ const init = () => {
   event.preventDefault(); 
   menu.classList.toggle('visible');
   });
+
+  logoElem.addEventListener('click',  event => {
+    event.preventDefault(); 
+    addPostElem.classList.remove('visible');
+    postsWrapper.classList.remove('hide');
+
+  })
 
   setUsers.initUser(toggleAuthDom);
   setPosts.getPosts(showAllPosts);
