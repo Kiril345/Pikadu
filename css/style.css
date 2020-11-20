@@ -54,6 +54,7 @@ body {
   font-size: 14px;
   line-height: 22px;
   padding-left: 12px;
+  outline: transparent;
 }
 .search-button {
   height: 100%;
@@ -168,6 +169,7 @@ body {
   line-height: 22px;
   margin-right: 19px;
   cursor: pointer;
+  outline: transparent;
 }
 .post-author {
   display: flex;
@@ -489,6 +491,7 @@ body {
   padding: 23px 30px;
   margin-bottom: 16px;
   resize: none;
+  outline: transparent;
 }
 .error-title {
   display: flex;
