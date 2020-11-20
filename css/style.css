@@ -313,8 +313,8 @@ body {
 }
 .edit-label{
   display: block;
-  margin-bottom: 5px;
   text-align: center;
+  line-height: 1.6;
 }
 .edit-input{
   display: block;

@@ -169,8 +169,8 @@ const setPosts = {
     if(likesElem) {
       const post = target.closest('.post');
       const id = post.id;
-      const likePost = setPosts.allPosts.find(item => item.id == id);
-      const indexPost = setPosts.allPosts.findIndex(item => item.id == id);
+      const likePost = this.allPosts.find(item => item.id == id);
+      const indexPost = this.allPosts.findIndex(item => item.id == id);
       const userLike = likePost.likesUsers.find(item => item == setUsers.user.uid);
       if(!userLike) {
         likePost.like += 1;
@@ -382,7 +382,6 @@ const init = () => {
     addPostElem.classList.remove('visible');
     postsWrapper.classList.remove('hide');
     menu.classList.remove('visible');
-
   })
 
   setUsers.initUser(toggleAuthDom);
