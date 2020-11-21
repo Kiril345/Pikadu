@@ -12,10 +12,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 console.log(firebase);
 
-// Создаем переменную, в которую положим кнопку меню
-let menuToggle = document.querySelector('#menu-toggle');
-// Создаем переменную, в которую положим меню
-let menu = document.querySelector('.sidebar');
+const menuToggle = document.querySelector('#menu-toggle');
+const menu = document.querySelector('.sidebar');
 const regExpValidEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 const loginElem = document.querySelector('.login');
 const loginForm = document.querySelector('.login-form');
@@ -31,7 +29,6 @@ const editUsername = document.querySelector('.edit-username');
 const editPhoto = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
 const postsWrapper = document.querySelector('.posts');
-//const postElem = document.querySelector('.post');
 const loginError = document.querySelector('.login-error');
 const buttonNewPost = document.querySelector('.new-post-btn');
 const addPostElem = document.querySelector('.add-post');
@@ -39,7 +36,6 @@ const errorText = document.querySelector('.error-text');
 const loginForgetElem = document.querySelector('.login-forget');
 const likesCounter = document.querySelector('.likes-counter');
 const logoElem = document.querySelector('.header-logo');
-
 
 const setUsers = {
   user: null,
@@ -176,7 +172,7 @@ const setPosts = {
         likePost.like += 1;
         likePost.likesUsers.unshift(setUsers.user.uid);
         firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
-        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers); 
+        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
       }
       if(userLike) {
         likePost.like -= 1;
@@ -184,12 +180,11 @@ const setPosts = {
         const userDisLike = likePost.likesUsers.findIndex(item => item == setUsers.user.uid);
         likePost.likesUsers.splice(userDisLike, 1);
         firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
+
       }
     }
   }
 };
-
-
 
 
 const showAllPosts = () => { //ренедерим все посты
@@ -252,7 +247,6 @@ const showAllPosts = () => { //ренедерим все посты
 
 const toggleAuthDom = () => {
   const user = setUsers.user;
-  console.log(user);
   loginError.innerHTML = '';
 
   if (user) {
@@ -270,14 +264,20 @@ const toggleAuthDom = () => {
   }
 };
 
+function showMessage(arg) {
+  errorText.innerHTML += `<div class="error-title">` + arg + `</div>`;
+  setTimeout(() => errorText.innerHTML = '', 2000);
+};
 
 const init = () => {
+
   loginForm.addEventListener('submit', event => {
     event.preventDefault();
     if (emailInput.value && passwordInput.value) {
     setUsers.logIn(emailInput.value, passwordInput.value);
     } else {
       loginError.innerHTML = 'введите логин и пароль';
+      return;
     }
     loginForm.reset();
   
@@ -296,6 +296,7 @@ const init = () => {
     setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
     } else {
       loginError.innerHTML = 'введите логин и пароль';
+      return;
     }
     if (setUsers.user != null) {
       editUsername.value = setUsers.user.displayName
@@ -333,16 +334,14 @@ const init = () => {
     const { title, text, tags } = addPostElem.elements;
     console.log(title, text, tags);
     if (title.value.length < 6 ) {
-      errorText.innerHTML += `<div class="error-title">слишком короткий заголовок</div>`;
-      timer();
+      showMessage('слишком короткий заголовок');
       return;
     }
 
     if (text.value.length < 100 ) {
-      errorText.innerHTML += `<div class="error-title">слишком короткий текст</div>`;
-      timer();
+      showMessage('слишком короткий текст');
       return;
-    }
+    };
 
     setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
     addPostElem.reset();
@@ -354,6 +353,7 @@ const init = () => {
       setUsers.sendForget(emailInput.value)
     } else {
       loginError.innerHTML = 'для восстановления пароля введите email';
+      return;
     }
   });
 
@@ -361,15 +361,10 @@ const init = () => {
     if (setUsers.user !=null) {
       setPosts.addLikes(event)
     } else { 
-      errorText.innerHTML += `<div class="error-title">выполните вход на сайт</div>`;
-      timer();
-
+      showMessage('выполните вход на сайт');
+      return;
     }
   });
-
-  function timer() {
-    setTimeout(() => errorText.innerHTML = '', 2000);
-  }
 
 
   menuToggle.addEventListener('click', event => {
@@ -382,11 +377,11 @@ const init = () => {
     addPostElem.classList.remove('visible');
     postsWrapper.classList.remove('hide');
     menu.classList.remove('visible');
+    addPostElem.reset();
   })
 
   setUsers.initUser(toggleAuthDom);
   setPosts.getPosts(showAllPosts);
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {
