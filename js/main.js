@@ -58,17 +58,14 @@ const setUsers = {
     firebase.auth().signInWithEmailAndPassword(email, password)
     .catch(err => {
       const errCode = err.code;
-      const errMessage = err.message;
       if(errCode === 'auth/wrong-password') {
-        console.log(errMessage);
         loginError.innerHTML ='Неверный пароль';
+        return;
       } else if(errCode === 'auth/user-not-found') {
-        console.log(errMessage);
         loginError.innerHTML = 'Пользователь не найден';
       } else {
-        alert(errMessage);
+
       }
-      console.log(err);
     })  
   },
   logOut(handler) {
@@ -123,7 +120,7 @@ const setUsers = {
       loginError.innerHTML = 'на ваш email было отпрвлено письмо';
     })
     .catch(() => {
-      loginError.innerHTML = 'ошибка, письмо для восстановления пароля не отправлено';
+      loginError.innerHTML = 'ошибка, письмо не отправлено';
     })
   }
 };
@@ -188,11 +185,12 @@ const setPosts = {
 
 
 const showAllPosts = () => { //ренедерим все посты
-  let postsHTML = '';
+postsWrapper.textContent = '';
+let postsHTML = '';
 
-  setPosts.allPosts.forEach(({id, title, text, tags, author, date, like, comments}) => {
-
-  postsHTML += `
+  setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, comments}) {
+    
+  postsHTML = `
   <section class="post" id=${id}>
     <div class="post-body">
       <h2 class="post-title">${title}</h2>
@@ -236,12 +234,11 @@ const showAllPosts = () => { //ренедерим все посты
       </div>
     </div>
   </section>`
-  })
+  postsWrapper.insertAdjacentHTML('beforeend', postsHTML);
+  });
   
-  postsWrapper.innerHTML = postsHTML
   addPostElem.classList.remove('visible');
   postsWrapper.classList.remove('hide');
-
 };
 
 
@@ -280,7 +277,6 @@ const init = () => {
       return;
     }
     loginForm.reset();
-  
   });
   
 
