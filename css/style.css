@@ -155,8 +155,10 @@ body {
 .post-button .icon {
   fill: #8c8c8c;
 }
-.icon-like,
-.icon-comment {
+.icon-like{
+  fill: rgb(53, 52, 52)!important;
+}
+.icon{
   margin-right: 6px;
 }
 .post-button {
@@ -225,7 +227,7 @@ body {
 .login-error{
   display: block;
   width: 100%;
-  height: auto;
+  min-height: 20px;
   color: #fb0505;
   font-size: 13px;
   padding: 3px;

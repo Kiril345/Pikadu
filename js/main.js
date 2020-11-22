@@ -38,13 +38,15 @@ const likesCounter = document.querySelector('.likes-counter');
 const logoElem = document.querySelector('.header-logo');
 
 const setUsers = {
-  user: null,
+  user: '',
   initUser(hendler) {
     firebase.auth().onAuthStateChanged(user => {
       if(user) {
         this.user = user;
+        showAllPosts();
       } else {
-        this.user = null;
+        this.user = '';
+        showAllPosts();
       }
       if(hendler)hendler();
     })
@@ -69,7 +71,7 @@ const setUsers = {
     })  
   },
   logOut(handler) {
-    firebase.auth().signOut();
+    firebase.auth().signOut()
     handler();
   },
   signUp(email, password, handler) {
@@ -155,32 +157,34 @@ const setPosts = {
       handler();
     })
   },
+  
   addLikes(event) {
     const target = event.target;
     const likesElem = target.closest('.likes');
-
+    
     if(likesElem) {
       const post = target.closest('.post');
       const id = post.id;
       const likePost = this.allPosts.find(item => item.id == id);
       const indexPost = this.allPosts.findIndex(item => item.id == id);
       const userLike = likePost.likesUsers.find(item => item == setUsers.user.uid);
+      function like() {
+        firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
+        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
+      }
       if(!userLike) {
         likePost.like += 1;
         likePost.likesUsers.unshift(setUsers.user.uid);
-        firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
-        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
+        like();
       }
       if(userLike) {
         likePost.like -= 1;
-        firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
         const userDisLike = likePost.likesUsers.findIndex(item => item == setUsers.user.uid);
         likePost.likesUsers.splice(userDisLike, 1);
-        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
-
+        like();
       }
-    }
-  }
+    };
+  },
 };
 
 
@@ -188,8 +192,10 @@ const showAllPosts = () => { //ренедерим все посты
 postsWrapper.textContent = '';
 let postsHTML = '';
 
-  setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, comments}) {
-    
+  setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, likesUsers, comments}) {
+
+  let newClass = (likesUsers.find(item => item == setUsers.user.uid)) ? "icon-like" : "";
+
   postsHTML = `
   <section class="post" id=${id}>
     <div class="post-body">
@@ -203,13 +209,13 @@ let postsHTML = '';
     <div class="post-footer">
       <div class="post-buttons">
         <button class="post-button likes">
-          <svg width="19" height="20" class="icon icon-like">
+          <svg width="19" height="20" class="icon ${newClass}">
             <use xlink:href="img/icons.svg#like"></use>
           </svg>
           <span class="likes-counter">${like}</span>
         </button>
         <button class="post-button comments">
-          <svg width="21" height="21" class="icon icon-comment">
+          <svg width="21" height="21" class="icon">
             <use xlink:href="img/icons.svg#comment"></use>
           </svg>
           <span class="comments-counter">${comments}</span>
@@ -266,6 +272,7 @@ function showMessage(arg) {
   setTimeout(() => errorText.innerHTML = '', 2000);
 };
 
+
 const init = () => {
 
   loginForm.addEventListener('submit', event => {
@@ -294,7 +301,7 @@ const init = () => {
       loginError.innerHTML = 'введите логин и пароль';
       return;
     }
-    if (setUsers.user != null) {
+    if (setUsers.user !='') {
       editUsername.value = setUsers.user.displayName
       editContainer.classList.toggle('visible');
     } 
@@ -354,7 +361,7 @@ const init = () => {
   });
 
   postsWrapper.addEventListener('click', event => {
-    if (setUsers.user !=null) {
+    if (setUsers.user !='') {
       setPosts.addLikes(event)
     } else { 
       showMessage('выполните вход на сайт');
@@ -378,7 +385,8 @@ const init = () => {
 
   setUsers.initUser(toggleAuthDom);
   setPosts.getPosts(showAllPosts);
-}
+
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   init();
