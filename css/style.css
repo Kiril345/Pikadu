@@ -1,13 +1,6 @@
-.loaded{
-  display:none;
-}
-.loader{
-  height:100%;
-  width:100%;
-  position: fixed;
-}
-.loader .l_main{ 
-position:absolute;top:50%;left:50%;width:172px;height:128px;margin:0;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
+.loaded{display:none;}
+.loader{height:100%;width:100%;position: fixed;}
+.loader .l_main{position:absolute;top:50%;left:50%;width:172px;height:128px;margin:0;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}
 .loader{-webkit-transform:scale(0.85);transform: scale(0.85)}
 @media (max-width:1400px){.loader{-webkit-transform:scale(0.75);transform:scale(0.75)}}
 @media (max-width:440px){.loader{-webkit-transform:scale(0.5);transform:scale(0.5)}}
@@ -38,9 +31,6 @@ position:absolute;top:50%;left:50%;width:172px;height:128px;margin:0;-webkit-tra
 @-webkit-keyframes animsquare4{0%,20%,80%,100%{-webkit-transform:translate(0px,0px) rotate(0deg);transform:translate(0px,0px) rotate(0deg)}45%,55%{-webkit-transform:translate(-40px,0px) rotate(-90deg);transform:translate(-40px,0px) rotate(-90deg)}}
 @keyframes animsquare4{0%,20%,80%,100%{-webkit-transform:translate(0px,0px) rotate(0deg);transform:translate(0px,0px) rotate(0deg)}45%,55%{-webkit-transform:translate(-40px,0px) rotate(-90deg);transform:translate(-40px,0px) rotate(-90deg)}}
 @media (max-width:768px){.loader{margin-top:-64px;}}
-
-
-
 * {
   box-sizing: border-box;
 }
@@ -350,11 +340,14 @@ body {
   margin-right: 20px;
 }
 .edit-container{
+  overflow: hidden;
   width: 100%;
-  display: none;
+  height: 0px;
+  transition-duration: .4s;
+  transition-delay: .1s,.2s;
 }
 .edit-container.visible{
-  display: block;
+  height: 225px;
 }
 .edit-label{
   display: block;
@@ -493,7 +486,7 @@ body {
   color: #262626;
   margin: 10px 0;
 }
-.ad {
+.advertising{
   display: block;
   background-color: #fff;
   background-image: url("../img/promo.jpg");
@@ -506,7 +499,7 @@ body {
   margin-top: 20px;
   position: relative;
 }
-.ad::before {
+.advertising::before {
   content: "Реклама";
   position: absolute;
   right: 0;
