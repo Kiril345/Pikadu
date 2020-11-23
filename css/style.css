@@ -11,6 +11,8 @@ position:absolute;top:50%;left:50%;width:172px;height:128px;margin:0;-webkit-tra
 .loader{-webkit-transform:scale(0.85);transform: scale(0.85)}
 @media (max-width:1400px){.loader{-webkit-transform:scale(0.75);transform:scale(0.75)}}
 @media (max-width:440px){.loader{-webkit-transform:scale(0.5);transform:scale(0.5)}}
+@media (min-width:992px){.loader{width: calc(100% - 300px);}}
+@media (min-width:1200px){.loader{width: calc(100% - 350px);}}
 .l_square{position:relative}
 .l_square:nth-child(1){margin-left:0px}
 .l_square:nth-child(2){margin-left:44px}
