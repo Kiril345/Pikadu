@@ -36,6 +36,7 @@ const errorText = document.querySelector('.error-text');
 const loginForgetElem = document.querySelector('.login-forget');
 const likesCounter = document.querySelector('.likes-counter');
 const logoElem = document.querySelector('.header-logo');
+const preloader = document.querySelector('.loader');
 
 const setUsers = {
   user: '',
@@ -43,6 +44,7 @@ const setUsers = {
     firebase.auth().onAuthStateChanged(user => {
       if(user) {
         this.user = user;
+        console.log(user);
         showAllPosts();
       } else {
         this.user = '';
@@ -154,6 +156,7 @@ const setPosts = {
     firebase.database().ref('post').on('value', snapshot => {
       this.allPosts = snapshot.val() || [];
       console.log(this.allPosts)
+      preloader.classList.add('loaded');
       handler();
     })
   },
@@ -180,6 +183,7 @@ const setPosts = {
       if(userLike) {
         likePost.like -= 1;
         const userDisLike = likePost.likesUsers.findIndex(item => item == setUsers.user.uid);
+        console.log(userDisLike);
         likePost.likesUsers.splice(userDisLike, 1);
         like();
       }
@@ -194,7 +198,7 @@ let postsHTML = '';
 
   setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, likesUsers, comments}) {
 
-  let newClass = (likesUsers.find(item => item == setUsers.user.uid)) ? "icon-like" : "";
+  let newClass = (likesUsers.find(item => item === setUsers.user.uid)) ? "icon-like" : "";
 
   postsHTML = `
   <section class="post" id=${id}>
@@ -385,13 +389,14 @@ const init = () => {
 
   setUsers.initUser(toggleAuthDom);
   setPosts.getPosts(showAllPosts);
+  
+
 
 };
 
 document.addEventListener('DOMContentLoaded', () => {
   init();
 });
-
 
 
 
