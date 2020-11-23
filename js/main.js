@@ -17,6 +17,7 @@ const menu = document.querySelector('.sidebar');
 const regExpValidEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 const loginElem = document.querySelector('.login');
 const loginForm = document.querySelector('.login-form');
+const signInElem = document.querySelector('.login-signin');
 const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
 const loginSignup = document.querySelector('.login-signup');
@@ -44,7 +45,6 @@ const setUsers = {
     firebase.auth().onAuthStateChanged(user => {
       if(user) {
         this.user = user;
-        console.log(user);
         showAllPosts();
       } else {
         this.user = '';
@@ -52,8 +52,8 @@ const setUsers = {
       }
       if(hendler)hendler();
     })
-
   },
+
   logIn(email, password) {
     if (!regExpValidEmail.test(email)) { 
       loginError.innerHTML = 'некорректный email';
@@ -67,8 +67,6 @@ const setUsers = {
         return;
       } else if(errCode === 'auth/user-not-found') {
         loginError.innerHTML = 'Пользователь не найден';
-      } else {
-
       }
     })  
   },
@@ -76,35 +74,28 @@ const setUsers = {
     firebase.auth().signOut()
     handler();
   },
+
   signUp(email, password, handler) {
     if (!regExpValidEmail.test(email)) { 
       loginError.innerHTML = 'некорректный email';
       return;
     }
-
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(() => {
       this.editUser(email.substring(0, email.indexOf('@')), null, handler)
     })
     .catch(err => {
       const errCode = err.code;
-      const errMessage = err.message;
       if(errCode === 'auth/weak-password') {
-        console.log(errMessage);
         loginError.innerHTML = 'Пароль должен содержать не менее 6 символов';
       } else if(errCode === 'auth/email-already-in-use') {
-        console.log(errMessage);
         loginError.innerHTML = 'Пользователь с таким email уже существует';
-      } else {
-        alert(errMessage);
-
-      }
-      console.log(err);
+      } 
     });
   },
+
   editUser(displayName, photoURL, handler) {
     const user = firebase.auth().currentUser;
-
     if (displayName) {
       if(photoURL) {
         user.updateProfile({
@@ -118,6 +109,7 @@ const setUsers = {
       }
     }
   },
+
   sendForget(email) {
     firebase.auth().sendPasswordResetEmail(email)
     .then(() => {
@@ -129,10 +121,8 @@ const setUsers = {
   }
 };
 
-
 const setPosts = {
   allPosts: [],
-  
   addPost(title, text, tags, handler) {
     this.allPosts.unshift({
       id: `${(+new Date()).toString(16)}-${setUsers.user.uid}`,
@@ -150,8 +140,8 @@ const setPosts = {
     })
     firebase.database().ref('post').set(this.allPosts)
     .then(() => this.getPosts(handler))
-
   },
+
   getPosts(handler) {
     firebase.database().ref('post').on('value', snapshot => {
       this.allPosts = snapshot.val() || [];
@@ -164,7 +154,6 @@ const setPosts = {
   addLikes(event) {
     const target = event.target;
     const likesElem = target.closest('.likes');
-    
     if(likesElem) {
       const post = target.closest('.post');
       const id = post.id;
@@ -191,15 +180,11 @@ const setPosts = {
   },
 };
 
-
 const showAllPosts = () => { //ренедерим все посты
-postsWrapper.textContent = '';
-let postsHTML = '';
-
+  postsWrapper.textContent = '';
+  let postsHTML = '';
   setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, likesUsers, comments}) {
-
   let newClass = (likesUsers.find(item => item === setUsers.user.uid)) ? "icon-like" : "";
-
   postsHTML = `
   <section class="post" id=${id}>
     <div class="post-body">
@@ -246,7 +231,6 @@ let postsHTML = '';
   </section>`
   postsWrapper.insertAdjacentHTML('beforeend', postsHTML);
   });
-  
   addPostElem.classList.remove('visible');
   postsWrapper.classList.remove('hide');
 };
@@ -255,7 +239,6 @@ let postsHTML = '';
 const toggleAuthDom = () => {
   const user = setUsers.user;
   loginError.innerHTML = '';
-
   if (user) {
     loginElem.style.display = 'none'
     userElem.classList.add('visible');
@@ -276,10 +259,8 @@ function showMessage(arg) {
   setTimeout(() => errorText.innerHTML = '', 2000);
 };
 
-
 const init = () => {
-
-  loginForm.addEventListener('submit', event => {
+  signInElem.addEventListener('click', event => {
     event.preventDefault();
     if (emailInput.value && passwordInput.value) {
     setUsers.logIn(emailInput.value, passwordInput.value);
@@ -290,13 +271,11 @@ const init = () => {
     loginForm.reset();
   });
   
-
   exitElem.addEventListener('click', event => {
     event.preventDefault();
     setUsers.logOut(toggleAuthDom);
   });
   
-
   loginSignup.addEventListener('click', event => {
     event.preventDefault();
     if (emailInput.value && passwordInput.value) {
@@ -312,21 +291,17 @@ const init = () => {
     loginForm.reset();
   });
   
-
   editElem.addEventListener('click', event => {
     event.preventDefault();
-
     editUsername.value = setUsers.user.displayName
     editContainer.classList.toggle('visible');
   });
   
-
   editContainer.addEventListener('submit', event => {
     event.preventDefault();
     setUsers.editUser(editUsername.value, editPhoto.value, toggleAuthDom);
     editContainer.classList.remove('visible');
   });
-
 
   buttonNewPost.addEventListener('click', event => {
     event.preventDefault();
@@ -334,7 +309,6 @@ const init = () => {
     postsWrapper.classList.add('hide');
     menu.classList.toggle('visible');
   });
-
 
   addPostElem.addEventListener('submit', event => {
     event.preventDefault();
@@ -344,12 +318,10 @@ const init = () => {
       showMessage('слишком короткий заголовок');
       return;
     }
-
     if (text.value.length < 100 ) {
       showMessage('слишком короткий текст');
       return;
-    };
-
+    }  
     setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
     addPostElem.reset();
   });
@@ -373,10 +345,9 @@ const init = () => {
     }
   });
 
-
   menuToggle.addEventListener('click', event => {
-  event.preventDefault(); 
-  menu.classList.toggle('visible');
+    event.preventDefault(); 
+    menu.classList.toggle('visible');
   });
 
   logoElem.addEventListener('click',  event => {
@@ -385,13 +356,10 @@ const init = () => {
     postsWrapper.classList.remove('hide');
     menu.classList.remove('visible');
     addPostElem.reset();
-  })
+  });
 
   setUsers.initUser(toggleAuthDom);
   setPosts.getPosts(showAllPosts);
-  
-
-
 };
 
 document.addEventListener('DOMContentLoaded', () => {
