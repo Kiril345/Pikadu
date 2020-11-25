@@ -10,7 +10,6 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-console.log(firebase);
 
 const menuToggle = document.querySelector('#menu-toggle');
 const menu = document.querySelector('.sidebar');
@@ -35,7 +34,6 @@ const buttonNewPost = document.querySelector('.new-post-btn');
 const addPostElem = document.querySelector('.add-post');
 const errorText = document.querySelector('.error-text');
 const loginForgetElem = document.querySelector('.login-forget');
-const likesCounter = document.querySelector('.likes-counter');
 const logoElem = document.querySelector('.header-logo');
 const preloader = document.querySelector('.loader');
 
@@ -121,8 +119,10 @@ const setUsers = {
   }
 };
 
+
 const setPosts = {
   allPosts: [],
+  
   addPost(title, text, tags, handler) {
     this.allPosts.unshift({
       id: `${(+new Date()).toString(16)}-${setUsers.user.uid}`,
@@ -152,13 +152,12 @@ const setPosts = {
   },
   
   addLikes(event) {
-    const target = event.target;
-    const likesElem = target.closest('.likes');
+    const likesElem = event.target.closest('.likes');
     if(likesElem) {
-      const post = target.closest('.post');
-      const id = post.id;
-      const likePost = this.allPosts.find(item => item.id == id);
-      const indexPost = this.allPosts.findIndex(item => item.id == id);
+      const post = event.target.closest('.post');
+      const postId = post.id;
+      const likePost = this.allPosts.find(item => item.id == postId);
+      const indexPost = this.allPosts.findIndex(item => item.id == postId);
       const userLike = likePost.likesUsers.find(item => item == setUsers.user.uid);
       function like() {
         firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
@@ -184,10 +183,17 @@ const showAllPosts = () => { //ренедерим все посты
   postsWrapper.textContent = '';
   let postsHTML = '';
   setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, likesUsers, comments}) {
-  let newClass = (likesUsers.find(item => item === setUsers.user.uid)) ? "icon-like" : "";
+  let iconLike = (likesUsers.find(item => item === setUsers.user.uid)) ? "icon-like" : "";
   postsHTML = `
   <section class="post" id=${id}>
     <div class="post-body">
+      <div class="post-author">
+        <div class="author-about">
+          <a href="#" class="author-link"><img src=${author.photo || "img/avatar.svg"} alt="avatar" class="author-avatar"></a>
+          <a href="#" class="author-username">${author.displayName}</a>
+        </div>
+        <div class="post-time">${date}</div>
+      </div>
       <h2 class="post-title">${title}</h2>
       <p class="post-text">${text}</p>
       <div class="tags">
@@ -198,7 +204,7 @@ const showAllPosts = () => { //ренедерим все посты
     <div class="post-footer">
       <div class="post-buttons">
         <button class="post-button likes">
-          <svg width="19" height="20" class="icon ${newClass}">
+          <svg width="19" height="20" class="icon ${iconLike}">
             <use xlink:href="img/icons.svg#like"></use>
           </svg>
           <span class="likes-counter">${like}</span>
@@ -219,13 +225,6 @@ const showAllPosts = () => { //ренедерим все посты
             <use xlink:href="img/icons.svg#share"></use>
           </svg>
         </button>
-      </div>
-      <div class="post-author">
-        <div class="author-about">
-          <a href="#" class="author-username">${author.displayName}</a>
-          <span class="post-time">${date}</span>
-        </div>
-        <a href="#" class="author-link"><img src=${author.photo || "img/avatar.svg"} alt="avatar" class="author-avatar"></a>
       </div>
     </div>
   </section>`
@@ -260,6 +259,7 @@ function showMessage(arg) {
 };
 
 const init = () => {
+
   signInElem.addEventListener('click', event => {
     event.preventDefault();
     if (emailInput.value && passwordInput.value) {
@@ -284,11 +284,21 @@ const init = () => {
       loginError.innerHTML = 'введите логин и пароль';
       return;
     }
-    if (setUsers.user !='') {
+    if (setUsers.user !=='') {
       editUsername.value = setUsers.user.displayName
       editContainer.classList.toggle('visible');
     } 
     loginForm.reset();
+  });
+
+  loginForgetElem.addEventListener('click', event => {
+    event.preventDefault();
+    if (emailInput.value) { 
+      setUsers.sendForget(emailInput.value)
+    } else {
+      loginError.innerHTML = 'для восстановления пароля введите email';
+      return;
+    }
   });
   
   editElem.addEventListener('click', event => {
@@ -326,18 +336,8 @@ const init = () => {
     addPostElem.reset();
   });
 
-  loginForgetElem.addEventListener('click', event => {
-    event.preventDefault();
-    if (emailInput.value) { 
-      setUsers.sendForget(emailInput.value)
-    } else {
-      loginError.innerHTML = 'для восстановления пароля введите email';
-      return;
-    }
-  });
-
   postsWrapper.addEventListener('click', event => {
-    if (setUsers.user !='') {
+    if (setUsers.user !=='') {
       setPosts.addLikes(event)
     } else { 
       showMessage('выполните вход на сайт');
