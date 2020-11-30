@@ -1,3 +1,4 @@
+'use strict';
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAzw1XzNyxeV0HcUYuFCYmvu6rfRntUEec",
@@ -16,10 +17,14 @@ const menu = document.querySelector('.sidebar');
 const regExpValidEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 const loginElem = document.querySelector('.login');
 const loginForm = document.querySelector('.login-form');
+const loginTitile = document.querySelector('.login-title');
+const signUpCloseElem = document.querySelector('.signup-close');
 const signInElem = document.querySelector('.login-signin');
 const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
-const loginSignup = document.querySelector('.login-signup');
+const passwordInputRepeat = document.querySelector('.login-password-repeat');
+const loginSignUpElem = document.querySelector('.login-signup');
+const signUpElem = document.querySelector('.signup');
 const userElem = document.querySelector('.user');
 const userNameElem = document.querySelector('.user-name');
 const exitElem = document.querySelector('.exit');
@@ -38,14 +43,14 @@ const logoElem = document.querySelector('.header-logo');
 const preloader = document.querySelector('.loader');
 
 const setUsers = {
-  user: '',
+  user: null,
   initUser(hendler) {
     firebase.auth().onAuthStateChanged(user => {
       if(user) {
         this.user = user;
         showAllPosts();
       } else {
-        this.user = '';
+        this.user = null;
         showAllPosts();
       }
       if(hendler)hendler();
@@ -55,6 +60,7 @@ const setUsers = {
   logIn(email, password) {
     if (!regExpValidEmail.test(email)) { 
       loginError.innerHTML = 'некорректный email';
+      loginForm.reset();
       return;
     }
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -62,9 +68,11 @@ const setUsers = {
       const errCode = err.code;
       if(errCode === 'auth/wrong-password') {
         loginError.innerHTML ='Неверный пароль';
+        passwordInput.value = '';
         return;
       } else if(errCode === 'auth/user-not-found') {
         loginError.innerHTML = 'Пользователь не найден';
+        loginForm.reset();
       }
     })  
   },
@@ -156,8 +164,9 @@ const setPosts = {
     if(likesElem) {
       const post = event.target.closest('.post');
       const postId = post.id;
-      const likePost = this.allPosts.find(item => item.id == postId);
-      const indexPost = this.allPosts.findIndex(item => item.id == postId);
+      const map = this.allPosts.map(({id, likesUsers, like}) => ({id, likesUsers, like}));
+      const likePost = map.find(item => item.id == post.id);
+      const indexPost = map.findIndex(item => item.id == postId);
       const userLike = likePost.likesUsers.find(item => item == setUsers.user.uid);
       function like() {
         firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
@@ -171,7 +180,6 @@ const setPosts = {
       if(userLike) {
         likePost.like -= 1;
         const userDisLike = likePost.likesUsers.findIndex(item => item == setUsers.user.uid);
-        console.log(userDisLike);
         likePost.likesUsers.splice(userDisLike, 1);
         like();
       }
@@ -180,10 +188,12 @@ const setPosts = {
 };
 
 const showAllPosts = () => { //ренедерим все посты
+  let user = setUsers.user;
+  user == null ? user = '' : user ;
   postsWrapper.textContent = '';
   let postsHTML = '';
   setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, likesUsers, comments}) {
-  let iconLike = (likesUsers.find(item => item === setUsers.user.uid)) ? "icon-like" : "";
+  let iconLike = (likesUsers.find(item => item == user.uid)) ? "icon-like" : "";
   postsHTML = `
   <section class="post" id=${id}>
     <div class="post-body">
@@ -234,7 +244,6 @@ const showAllPosts = () => { //ренедерим все посты
   postsWrapper.classList.remove('hide');
 };
 
-
 const toggleAuthDom = () => {
   const user = setUsers.user;
   loginError.innerHTML = '';
@@ -258,6 +267,17 @@ function showMessage(arg) {
   setTimeout(() => errorText.innerHTML = '', 2000);
 };
 
+function signUpClose() {
+  signUpCloseElem.classList.remove('visible');
+  passwordInputRepeat.classList.remove('visible');
+  loginTitile.textContent = 'Авторизация';
+  loginSignUpElem.classList.remove('hide');
+  loginForgetElem.classList.remove('hide');
+  signInElem.classList.remove('hide');
+  signUpElem.classList.remove('visible');
+  loginError.innerHTML = '';
+}
+
 const init = () => {
 
   signInElem.addEventListener('click', event => {
@@ -268,27 +288,50 @@ const init = () => {
       loginError.innerHTML = 'введите логин и пароль';
       return;
     }
-    loginForm.reset();
   });
   
   exitElem.addEventListener('click', event => {
     event.preventDefault();
     setUsers.logOut(toggleAuthDom);
+    signUpClose();
   });
   
-  loginSignup.addEventListener('click', event => {
+  loginSignUpElem.addEventListener('click', event => {
     event.preventDefault();
-    if (emailInput.value && passwordInput.value) {
-    setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
-    } else {
-      loginError.innerHTML = 'введите логин и пароль';
-      return;
-    }
-    if (setUsers.user !=='') {
-      editUsername.value = setUsers.user.displayName
-      editContainer.classList.toggle('visible');
-    } 
-    loginForm.reset();
+    loginError.innerHTML = '';
+    signUpCloseElem.classList.add('visible');
+    passwordInputRepeat.classList.add('visible');
+    loginTitile.textContent = 'Регистрация';
+    loginSignUpElem.classList.add('hide');
+    loginForgetElem.classList.add('hide');
+    signInElem.classList.add('hide');
+    signUpElem.classList.add('visible');
+    signUpCloseElem.addEventListener('click', event => {
+      event.preventDefault();
+      signUpClose();
+    });
+    signUpElem.addEventListener('click', event => {
+      event.preventDefault();
+      if (emailInput.value && passwordInput.value && passwordInputRepeat.value) {
+      } else {
+        loginError.innerHTML = 'заполните все поля';
+        return;
+      }
+      if (passwordInput.value !== passwordInputRepeat.value) {
+        loginError.innerHTML = 'пароли не совпадают';
+        passwordInput.value = ''; 
+        passwordInputRepeat.value = '';
+        return;
+      }  
+      if (emailInput.value && passwordInput.value && passwordInputRepeat.value && passwordInput.value === passwordInputRepeat.value) {
+        setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
+        loginForm.reset();
+      }
+      if (setUsers.user != null) {
+        editUsername.value = setUsers.user.displayName
+        editContainer.classList.add('visible');
+      } 
+    })
   });
 
   loginForgetElem.addEventListener('click', event => {
@@ -337,7 +380,7 @@ const init = () => {
   });
 
   postsWrapper.addEventListener('click', event => {
-    if (setUsers.user !=='') {
+    if (setUsers.user != null) {
       setPosts.addLikes(event)
     } else { 
       showMessage('выполните вход на сайт');
