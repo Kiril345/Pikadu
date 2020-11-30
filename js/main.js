@@ -15,16 +15,18 @@ firebase.initializeApp(firebaseConfig);
 const menuToggle = document.querySelector('#menu-toggle');
 const menu = document.querySelector('.sidebar');
 const regExpValidEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
-const loginElem = document.querySelector('.login');
+const login = document.querySelector('.login');
+const loginError = document.querySelector('.login-error');
 const loginForm = document.querySelector('.login-form');
 const loginTitile = document.querySelector('.login-title');
 const signUpCloseElem = document.querySelector('.signup-close');
-const signInElem = document.querySelector('.login-signin');
 const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
 const passwordInputRepeat = document.querySelector('.login-password-repeat');
+const signInElem = document.querySelector('.btn-signin');
+const signUpElem = document.querySelector('.btn-signup');
+const loginForgetElem = document.querySelector('.login-forget');
 const loginSignUpElem = document.querySelector('.login-signup');
-const signUpElem = document.querySelector('.signup');
 const userElem = document.querySelector('.user');
 const userNameElem = document.querySelector('.user-name');
 const exitElem = document.querySelector('.exit');
@@ -34,11 +36,9 @@ const editUsername = document.querySelector('.edit-username');
 const editPhoto = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
 const postsWrapper = document.querySelector('.posts');
-const loginError = document.querySelector('.login-error');
 const buttonNewPost = document.querySelector('.new-post-btn');
 const addPostElem = document.querySelector('.add-post');
 const errorText = document.querySelector('.error-text');
-const loginForgetElem = document.querySelector('.login-forget');
 const logoElem = document.querySelector('.header-logo');
 const preloader = document.querySelector('.loader');
 
@@ -57,7 +57,7 @@ const setUsers = {
     })
   },
 
-  logIn(email, password) {
+  logIn(email, password, handler) {
     if (!regExpValidEmail.test(email)) { 
       loginError.innerHTML = 'некорректный email';
       loginForm.reset();
@@ -74,7 +74,8 @@ const setUsers = {
         loginError.innerHTML = 'Пользователь не найден';
         loginForm.reset();
       }
-    })  
+    }) 
+    handler();
   },
   logOut(handler) {
     firebase.auth().signOut()
@@ -88,7 +89,7 @@ const setUsers = {
     }
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then(() => {
-      this.editUser(email.substring(0, email.indexOf('@')), null, handler)
+      this.editUser(email.substring(0, email.indexOf('@')), null, handler);
     })
     .catch(err => {
       const errCode = err.code;
@@ -98,6 +99,7 @@ const setUsers = {
         loginError.innerHTML = 'Пользователь с таким email уже существует';
       } 
     });
+    handler(editContainer.classList.add('visible'));
   },
 
   editUser(displayName, photoURL, handler) {
@@ -248,13 +250,14 @@ const toggleAuthDom = () => {
   const user = setUsers.user;
   loginError.innerHTML = '';
   if (user) {
-    loginElem.style.display = 'none'
+    login.style.display = 'none'
     userElem.classList.add('visible');
     userNameElem.textContent = user.displayName;
+    editUsername.value = user.displayName;
     userAvatarElem.src = user.photoURL || 'img/avatar.svg';
     buttonNewPost.classList.add('visible');
   } else {
-    loginElem.style.display = ''
+    login.style.display = ''
     userElem.classList.remove('visible');
     buttonNewPost.classList.remove('visible');
     addPostElem.classList.remove('visible');
@@ -268,13 +271,8 @@ function showMessage(arg) {
 };
 
 function signUpClose() {
-  signUpCloseElem.classList.remove('visible');
-  passwordInputRepeat.classList.remove('visible');
+  loginForm.classList.remove('show');
   loginTitile.textContent = 'Авторизация';
-  loginSignUpElem.classList.remove('hide');
-  loginForgetElem.classList.remove('hide');
-  signInElem.classList.remove('hide');
-  signUpElem.classList.remove('visible');
   loginError.innerHTML = '';
 }
 
@@ -283,7 +281,7 @@ const init = () => {
   signInElem.addEventListener('click', event => {
     event.preventDefault();
     if (emailInput.value && passwordInput.value) {
-    setUsers.logIn(emailInput.value, passwordInput.value);
+    setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
     } else {
       loginError.innerHTML = 'введите логин и пароль';
       return;
@@ -292,47 +290,40 @@ const init = () => {
   
   exitElem.addEventListener('click', event => {
     event.preventDefault();
+    editContainer.classList.remove('visible');
     setUsers.logOut(toggleAuthDom);
     signUpClose();
     loginForm.reset();
+    editContainer.reset();
   });
   
   loginSignUpElem.addEventListener('click', event => {
     event.preventDefault();
     loginError.innerHTML = '';
-    signUpCloseElem.classList.add('visible');
-    passwordInputRepeat.classList.add('visible');
+    loginForm.classList.add('show');
     loginTitile.textContent = 'Регистрация';
-    loginSignUpElem.classList.add('hide');
-    loginForgetElem.classList.add('hide');
-    signInElem.classList.add('hide');
-    signUpElem.classList.add('visible');
-    signUpCloseElem.addEventListener('click', event => {
-      event.preventDefault();
-      signUpClose();
-    });
-    signUpElem.addEventListener('click', event => {
-      event.preventDefault();
-      if (emailInput.value && passwordInput.value && passwordInputRepeat.value) {
-      } else {
-        loginError.innerHTML = 'заполните все поля';
-        return;
-      }
-      if (passwordInput.value !== passwordInputRepeat.value) {
-        loginError.innerHTML = 'пароли не совпадают';
-        passwordInput.value = ''; 
-        passwordInputRepeat.value = '';
-        return;
-      }  
-      if (emailInput.value && passwordInput.value && passwordInputRepeat.value && passwordInput.value === passwordInputRepeat.value) {
-        setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
-        loginForm.reset();
-      }
-      if (setUsers.user != null) {
-        editUsername.value = setUsers.user.displayName
-        editContainer.classList.add('visible');
-      } 
-    })
+  });
+  signUpCloseElem.addEventListener('click', event => {
+    event.preventDefault();
+    signUpClose();
+  });
+  signUpElem.addEventListener('click', event => {
+    event.preventDefault();
+    if (emailInput.value && passwordInput.value && passwordInputRepeat.value) {
+    } else {
+      loginError.innerHTML = 'заполните все поля';
+      return;
+    }
+    if (passwordInput.value !== passwordInputRepeat.value) {
+      loginError.innerHTML = 'пароли не совпадают';
+      passwordInput.value = ''; 
+      passwordInputRepeat.value = '';
+      return;
+    }  
+    if (emailInput.value && passwordInput.value && passwordInputRepeat.value && passwordInput.value === passwordInputRepeat.value) {
+      setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
+      loginForm.reset();
+    }
   });
 
   loginForgetElem.addEventListener('click', event => {

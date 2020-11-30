@@ -285,7 +285,7 @@ body {
 .signup-close{
   position: absolute;
   outline: transparent;
-  top: -10px;
+  top: -15px;
   right: -20px;
   display: none;
   background: none;
@@ -293,13 +293,12 @@ body {
   font-size: 30px;
   color: #b8b2b2;
 }
-
-.signup.visible, .signup-close.visible, .login-password-repeat.visible{
-  display: block;
+.btn-signup, .login-password-repeat{
+  display: none;
 }
 
-.login-signin.hide, .signup, .login-password-repeat{
-  display: none;
+.show .signup-close, .show .login-password-repeat, .show .btn-signup{
+  display: block;
 }
 
 .login-forget{
@@ -311,7 +310,7 @@ body {
   font-style: italic;
   cursor: pointer;
 }
-.login-forget.hide{
+.show .login-forget, .show .login-signup, .show .btn-signin{
   display: none;
 }
 
@@ -388,7 +387,7 @@ body {
   width: 100%;
   height: 0px;
   transition-duration: .4s;
-  transition-delay: .1s,.2s;
+  transition-delay: .1s;
 }
 .edit-container.visible{
   height: 225px;
@@ -613,6 +612,10 @@ body {
     height: 20px;
     margin-left: 12px;
   }
+
+.signup-close{
+  right: -15px;
+}
   .menu-toggle span {
     height: 2px;
     width: 100%;
