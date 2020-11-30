@@ -294,6 +294,7 @@ const init = () => {
     event.preventDefault();
     setUsers.logOut(toggleAuthDom);
     signUpClose();
+    loginForm.reset();
   });
   
   loginSignUpElem.addEventListener('click', event => {
