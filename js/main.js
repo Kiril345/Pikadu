@@ -155,7 +155,7 @@ const setPosts = {
   getPosts(handler) {
     firebase.database().ref('post').on('value', snapshot => {
       this.allPosts = snapshot.val() || [];
-      console.log(this.allPosts)
+      //console.log(this.allPosts)
       preloader.classList.add('loaded');
       handler();
     })
@@ -271,6 +271,7 @@ function showMessage(arg) {
 };
 
 function signUpClose() {
+  signInElem.setAttribute('type', "submit");
   loginForm.classList.remove('show');
   loginTitile.textContent = 'Авторизация';
   loginError.innerHTML = '';
@@ -278,14 +279,19 @@ function signUpClose() {
 
 const init = () => {
 
+  
+
   signInElem.addEventListener('click', event => {
     event.preventDefault();
+    const atr = signInElem.getAttribute('type');
+    if (atr == "submit"){
     if (emailInput.value && passwordInput.value) {
     setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
     } else {
       loginError.innerHTML = 'введите логин и пароль';
       return;
     }
+  }
   });
   
   exitElem.addEventListener('click', event => {
@@ -299,6 +305,7 @@ const init = () => {
   
   loginSignUpElem.addEventListener('click', event => {
     event.preventDefault();
+    signInElem.setAttribute('type', "");
     loginError.innerHTML = '';
     loginForm.classList.add('show');
     loginTitile.textContent = 'Регистрация';

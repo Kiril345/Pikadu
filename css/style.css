@@ -39,6 +39,9 @@ body {
   background: #e5e5e5;
 }
 .header {
+  position: fixed;
+  width: 100%;
+  z-index: 999;
   background: #fa8c16;
   padding-top: 16px;
   padding-bottom: 16px;
@@ -122,6 +125,7 @@ body {
 }
 .content {
   max-width: 1200px;
+  padding-top: 94px;
   width: 90%;
   margin: auto;
   display: flex;
@@ -283,6 +287,7 @@ body {
 }
 
 .signup-close{
+  cursor: pointer;
   position: absolute;
   outline: transparent;
   top: -15px;
@@ -292,6 +297,9 @@ body {
   border:none;
   font-size: 30px;
   color: #b8b2b2;
+}
+.signup-close:hover{
+  filter:brightness(80%);
 }
 .btn-signup, .login-password-repeat{
   display: none;
@@ -588,7 +596,7 @@ body {
   margin: auto;
   height: 80px;
   width: 300px;
-  background:rgb(232 215 215 / 88%);
+  background:rgb(232 215 215 / 98%);
   padding: 20px;
   border-radius: 5px;
   z-index: 999999;
@@ -630,8 +638,15 @@ body {
     width: 100%;
   }
   .content {
-    margin-top: 94px;
-    margin-bottom: 60px;
+    padding-top: 84px;
+    padding-bottom: 60px;
+  }
+  .posts, .add-post{
+    width: 100%;
+  }
+  .error-title{
+    width: 80%;
+    background:#e8d7d7;
   }
   .sidebar {
     position: fixed;
@@ -708,14 +723,4 @@ body {
   .add-button {
     width: 100%;
   }
-}
-@media (max-width: 990px) {
-  .posts, .add-post{
-    width: 100%;
-  }
-  .error-title{
-    width: 95%;
-    background:#e8d7d7;
-  }
-  
 }
