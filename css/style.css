@@ -73,6 +73,12 @@ body {
   font-size: 14px;
   line-height: 22px;
 }
+.header-menu-link.active{
+  font-weight: bold;
+}
+.header-menu-link:active, .header-logo:active, .edit:active, .exit:active {
+  filter: brightness(80%);
+}
 .input-group {
   max-width: 237px;
   width: 60%;
@@ -388,6 +394,7 @@ body {
   fill: #000;
 }
 .edit{
+  display: flex;
   margin-right: 20px;
 }
 .edit-container{
@@ -445,6 +452,15 @@ body {
 .icon-edit {
   width: 20px;
   height: 20px;
+  -webkit-mask: url(../img/edit.svg) no-repeat 50% 50%;
+  mask: url(../img/edit.svg) no-repeat 50% 50%;
+  background-color: #000;
+}
+.icon-edit:active{
+  background-color:#bdbaba;
+}
+.exit{
+  display: flex;
 }
 .sidebar-nav {
   background-color: #fff;
@@ -621,13 +637,16 @@ body {
     margin-left: 12px;
   }
 
-.signup-close{
-  right: -15px;
-}
-  .menu-toggle span {
+  .signup-close{
+    right: -15px;
+  }
+  .menu-tuggle-line {
     height: 2px;
     width: 100%;
     background-color: #fff;
+  }
+  .menu-toggle:active{
+    filter:brightness(80%);
   }
   .header {
     position: fixed;
