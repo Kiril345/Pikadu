@@ -33,6 +33,11 @@
 @media (max-width:768px){.loader{margin-top:35px;}}
 * {
   box-sizing: border-box;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-user-select: none;
 }
 body {
   font-family: sans-serif;
@@ -644,9 +649,6 @@ body {
     height: 2px;
     width: 100%;
     background-color: #fff;
-  }
-  .menu-toggle:active{
-    filter:brightness(80%);
   }
   .header {
     position: fixed;
