@@ -12,7 +12,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-const menuToggle = document.querySelector('#menu-toggle');
+const menuToggle = document.querySelector('.menu-toggle');
 const menu = document.querySelector('.sidebar');
 const regExpValidEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 const login = document.querySelector('.login');
@@ -386,7 +386,7 @@ const init = () => {
   });
 
   menuToggle.addEventListener('click', event => {
-    event.preventDefault(); 
+    //event.preventDefault(); 
     menu.classList.toggle('visible');
   });
 

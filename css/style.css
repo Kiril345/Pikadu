@@ -641,11 +641,14 @@ body {
     height: 20px;
     margin-left: 12px;
   }
+  .menu-toggle:active{
+    filter:brightness(80%);
+  }
 
   .signup-close{
     right: -15px;
   }
-  .menu-tuggle-line {
+  .menu-toggle-line {
     height: 2px;
     width: 100%;
     background-color: #fff;
