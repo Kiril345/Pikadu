@@ -710,6 +710,12 @@ body {
   }
 }
 @media (max-width: 576px) {
+  .content{
+    width: 100%;
+  }
+  .post-body{
+    padding-top: 15px;
+  }
   .post-footer {
     flex-direction: column;
   }
