@@ -672,7 +672,7 @@ body {
 }
 .menu-posts-item:active {
   color: #a1a1a1;
-  filter:brightness(10%);
+  filter:brightness(15%);
 }
 
   .signup-close{
