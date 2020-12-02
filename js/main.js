@@ -271,7 +271,6 @@ function showMessage(arg) {
 };
 
 function signUpClose() {
-  signInElem.setAttribute('type', "submit");
   loginForm.classList.remove('show');
   loginTitile.textContent = 'Авторизация';
   loginError.innerHTML = '';
@@ -279,19 +278,18 @@ function signUpClose() {
 
 const init = () => {
 
-  
-
   signInElem.addEventListener('click', event => {
     event.preventDefault();
-    const atr = signInElem.getAttribute('type');
-    if (atr == "submit"){
-    if (emailInput.value && passwordInput.value) {
-    setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
-    } else {
-      loginError.innerHTML = 'введите логин и пароль';
+    if (loginForm.classList.contains('show')){
       return;
+    } else {
+      if (emailInput.value && passwordInput.value) {
+      setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
+      } else {
+        loginError.innerHTML = 'введите логин и пароль';
+        return;
+      }
     }
-  }
   });
   
   exitElem.addEventListener('click', event => {
