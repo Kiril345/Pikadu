@@ -41,7 +41,8 @@ const addPostElem = document.querySelector('.add-post');
 const errorText = document.querySelector('.error-text');
 const logoElem = document.querySelector('.header-logo');
 const preloader = document.querySelector('.loader');
-const body = document.querySelector('body');
+const headerNav = document.querySelector('.header-menu');
+const postsMobNav = document.querySelector('.posts-menu-list');
 
 const setUsers = {
   user: null,
@@ -399,15 +400,17 @@ const init = () => {
     addPostElem.reset();
   });
 
-  body.addEventListener('click', function (event) {
+  headerNav.addEventListener('click',  event => {
     event.preventDefault();
     if (setUsers.user == null) {
-      if (event.target.matches('.header-menu-link')) {
-        showMessage('Пожауста выполните вход');
-      }
-      if (event.target.matches('.menu-posts-item')) {
-        showMessage('Пожауста выполните вход');
-      }
+      showMessage('Пожауста выполните вход');
+    }
+  });
+
+  postsMobNav.addEventListener('click',  event => {
+    event.preventDefault();
+    if (setUsers.user == null) {
+      showMessage('Пожауста выполните вход');
     }
   });
   
