@@ -663,18 +663,16 @@ body {
     height: 20px;
     list-style: none;
     color: #595959;
+    font-weight: 500;
     /*-webkit-mask: url(../img/avatar.svg) no-repeat 50% 50%;
     mask: url(../img/avatar.svg) no-repeat 50% 50%;
     background-color: #42403d;*/
-}
-.menu-posts-item{
-  color: #595959;
-}
-.menu-posts-item:active {
+  }
+  .menu-posts-item:active {
   color: #a1a1a1;
   filter:brightness(15%);
-}
-
+ 
+  }
   .signup-close{
     right: -15px;
   }
