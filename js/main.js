@@ -41,6 +41,7 @@ const addPostElem = document.querySelector('.add-post');
 const errorText = document.querySelector('.error-text');
 const logoElem = document.querySelector('.header-logo');
 const preloader = document.querySelector('.loader');
+const body = document.querySelector('body');
 
 const setUsers = {
   user: null,
@@ -380,13 +381,13 @@ const init = () => {
     if (setUsers.user != null) {
       setPosts.addLikes(event)
     } else { 
-      showMessage('выполните вход на сайт');
+      showMessage('Пожауста выполните вход');
       return;
     }
   });
 
   menuToggle.addEventListener('click', event => {
-    //event.preventDefault(); 
+    event.preventDefault(); 
     menu.classList.toggle('visible');
   });
 
@@ -398,6 +399,18 @@ const init = () => {
     addPostElem.reset();
   });
 
+  body.addEventListener('click', function (event) {
+    event.preventDefault();
+    if (setUsers.user == null) {
+      if (event.target.matches('.header-menu-link')) {
+        showMessage('Пожауста выполните вход');
+      }
+      if (event.target.matches('.menu-posts-item')) {
+        showMessage('Пожауста выполните вход');
+      }
+    }
+  });
+  
   setUsers.initUser(toggleAuthDom);
   setPosts.getPosts(showAllPosts);
 };
