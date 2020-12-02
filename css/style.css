@@ -669,9 +669,7 @@ body {
     background-color: #42403d;*/
   }
   .menu-posts-item:active {
-  color: #a1a1a1;
-  filter:brightness(15%);
- 
+  color:#bdbaba;
   }
   .signup-close{
     right: -15px;
