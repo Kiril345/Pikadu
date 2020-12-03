@@ -166,6 +166,7 @@ body {
   align-items: center;
 }
 .post-title {
+  color: #262626;
   margin-top: 0;
   margin-bottom: 19px;
   font-weight: 600;
@@ -180,10 +181,10 @@ body {
 }
 .tags {
   margin-bottom: 22px;
-  color: #bfbfbf;
+  color: #a2a1a1;
 }
 .tag {
-  color: #bfbfbf;
+  color: #a2a1a1;
   font-size: 14px;
   line-height: 22px;
   margin-left: 10px;
@@ -246,7 +247,7 @@ body {
   margin-left: 7px;
 }
 .post-time {
-  color: #bfbfbf;
+  color: #a2a1a1;
   font-size: 13px;
   line-height: 1;
 }
@@ -269,15 +270,12 @@ body {
   position: relative;
 }
 
-.login-title, .edit-title{
+.login-title, .edit-title, .card-title{
   text-align: center;
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: 600;
   color: #595959;
-}
-.edi-title{
-  margin-bottom: 10px;
 }
 .login-error{
   display: block;
@@ -327,7 +325,7 @@ body {
   font-size: 12px;
   text-decoration: none;
   color: #757575;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-style: italic;
   cursor: pointer;
 }
@@ -545,10 +543,7 @@ body {
 }
 .card-title {
   margin: 0;
-  font-weight: 600;
-  font-size: 16px;
   line-height: 24px;
-  color: #595959;
 }
 .card-body {
   padding: 22px 40px 20px 25px;
@@ -739,7 +734,6 @@ body {
     padding: 15px;
   }
   .login-forget{
-    margin-bottom: 15px;
     font-size: 13px;
   }
   .card-header{
