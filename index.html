@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Выводим заголовок -->
   <title>Pikadu — делитесь самым интересным </title>
-  <!-- Подключаем normalize -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/normalize.css">
-  <!-- Подключаем стили -->
   <link rel="stylesheet" href="css/style.css">
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/8.0.2/firebase-app.js" defer></script>
@@ -35,7 +32,7 @@
       <div class="l_square"><span></span><span></span><span></span></div>
     </div>
   </div>
-  <!-- Создаем шапку сайта -->
+
   <header class="header">
     <div class="error-text"></div>
     <div class="header-wrapper">
@@ -50,21 +47,21 @@
         </ul>
         
       </nav>
-      <!-- /.header-nav -->
+
       <div class="input-group search">
         <input type="search" class="search-input" placeholder="Поиск">
         <button class="search-button">
           <img src="img/search.svg" alt="icon: search" class="search-icon">
         </button>
       </div>
-      <!-- /.input-group -->
+
       <a href="#" class="menu-toggle">
         <span class="menu-toggle-line"></span>
         <span class="menu-toggle-line"></span>
         <span class="menu-toggle-line"></span>
       </a>
     </div>
-    <!-- /.header-wrapper -->
+
   </header>
 
   <div class="content">
@@ -74,14 +71,12 @@
       <input type="text" name="title"  class="add-title" autocomplete="off" placeholder="Заголовок поста">
       <textarea name="text" class="add-text" autocomplete="off" placeholder="Текст вашего поста"></textarea>
       <input type="text" name="tags" class="add-tags" autocomplete="off" placeholder="Добавьте теги через запятую">
-      <div class="add-buttons">
-        <button type="submit" class="btn-primary add-button">
-          <svg class="icon icon-fire">
-            <use xlink:href="img/icons.svg#fire"></use>
-          </svg>
+      <button type="submit" class="btn-primary add-button">
+        <svg class="icon icon-fire">
+          <use xlink:href="img/icons.svg#fire"></use>
+        </svg>
           Опубликовать пост
-        </button>
-      </div>
+      </button>
     </form>
     <aside class="sidebar">
       <div class="login">
@@ -93,8 +88,7 @@
           <input type="password" class="login-input login-password" name="pass" autocomplete="new-password" minlength="6" placeholder="введите свой пароль">
           <input type="password" class="login-input login-password-repeat" name="repeat-pass" autocomplete="repeat-new-password" minlength="6" placeholder="введите пароль еще раз">
           <span class="login-forget" title="введите свою почту и нажмите на это поле">Забыли пароль?</span>
-          <button class="btn-secondary btn-signin" type="submit" >Войти</button>
-          <button class="btn-secondary btn-signup" type="submit">Регистрация</button>
+          <button class="btn-secondary btn-signin btn-forget" id="btn-signup" type="submit" >Войти</button>
           <span class="login-signup">Регистрация</span>
           <button class="signup-close">&times;</button>
         </form>
@@ -105,7 +99,7 @@
             <img src="" alt="photo: user" class="user-avatar">
             <span class="user-name"></span>
           </a>
-          <!-- /.user-info -->
+
           <a href="#" class="edit">
             <span class="icon icon-edit">
           </a>

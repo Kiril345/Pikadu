@@ -24,9 +24,10 @@ const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
 const passwordInputRepeat = document.querySelector('.login-password-repeat');
 const signInElem = document.querySelector('.btn-signin');
-const signUpElem = document.querySelector('.btn-signup');
-const loginForgetElem = document.querySelector('.login-forget');
+const signUpElem = document.querySelector('#btn-signup');
+const forgetElem = document.querySelector('.btn-forget');
 const loginSignUpElem = document.querySelector('.login-signup');
+const loginForgetElem = document.querySelector('.login-forget');
 const userElem = document.querySelector('.user');
 const userNameElem = document.querySelector('.user-name');
 const exitElem = document.querySelector('.exit');
@@ -125,9 +126,12 @@ const setUsers = {
     .then(() => {
       loginError.innerHTML = 'на ваш email было отпрвлено письмо';
     })
-    .catch(() => {
+    .catch(err => {
+      const errCode = err.code;
+      console.log(errCode)
       loginError.innerHTML = 'ошибка, письмо не отправлено';
     })
+    
   }
 };
 
@@ -157,7 +161,6 @@ const setPosts = {
   getPosts(handler) {
     firebase.database().ref('post').on('value', snapshot => {
       this.allPosts = snapshot.val() || [];
-      //console.log(this.allPosts)
       preloader.classList.add('loaded');
       handler();
     })
@@ -165,16 +168,17 @@ const setPosts = {
   
   addLikes(event) {
     const likesElem = event.target.closest('.likes');
+    console.log(likesElem)
     if(likesElem) {
       const post = event.target.closest('.post');
       const postId = post.id;
       const map = this.allPosts.map(({id, likesUsers, like}) => ({id, likesUsers, like}));
-      const likePost = map.find(item => item.id == post.id);
+      const likePost = map.find(item => item.id == postId);
       const indexPost = map.findIndex(item => item.id == postId);
       const userLike = likePost.likesUsers.find(item => item == setUsers.user.uid);
       function like() {
-        firebase.database().ref('post/0/text').set("Доброго времени суток! Это интерактивное web-приложение, создано по подобию информационно-развлекательного портала Pikabu с целью увеличения своих проф скиллов. Приложение написано как Single page application на js с использованием HTML и css, в качестве бэк-энда используется Firebase API от google. Приложение имеет адаптивную верстку, и отлично отображается на устройствах с любым разрешеием экрана.<br><br>На данный момент в приложении реализованы такой функционал: регистрация пользователя с помощью email, валидация с выводом ошибок при регистрации и авторизации, восстановление пароля пользователя, изменение фото пользователя на аватаре, редактирование имени пользователя, валидация с выводом ошибок при создании поста, публикация постов с хештегами, отображение даты публикации постов, фильтрация по дате при отображения постов, лайк постов (лайкать имеют возможность только авторизованные пользователи, на любой пост один лайк).<br><br>Далее планируется реализовать возможность добавления фотографий и видео в посты, создание комментариев постов, возможности удаления и редактирования существующих постов, регистрации с помощью Фейсбук, указание пола и возраста при создании пользователя, фильтрацию постов по хештегам👨‍💻😎👌");
-        //firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
+        firebase.database().ref('post/' + indexPost + '/like').set(likePost.like);
+        firebase.database().ref('post/' + indexPost + '/likesUsers').set(likePost.likesUsers);
       }
       if(!userLike) {
         likePost.like += 1;
@@ -185,7 +189,7 @@ const setPosts = {
         likePost.like -= 1;
         const userDisLike = likePost.likesUsers.findIndex(item => item == setUsers.user.uid);
         likePost.likesUsers.splice(userDisLike, 1);
-        //like();
+        like();
       }
     };
   },
@@ -268,13 +272,16 @@ const toggleAuthDom = () => {
 };
 
 function showMessage(arg) {
-  errorText.innerHTML += `<div class="error-title">` + arg + `</div>`;
-  setTimeout(() => errorText.innerHTML = '', 2000);
+  errorText.textContent = ''
+  errorText.innerHTML += `<div class="error-box">` + arg + `</div>`;
+  setTimeout(() => errorText.textContent = '', 1700);
 };
 
 function signUpClose() {
-  loginForm.classList.remove('show');
+  loginForm.classList.remove('show-signup');
+  loginForm.classList.remove('show-forgetpus');
   loginTitile.textContent = 'Авторизация';
+  signInElem.textContent = 'войти';
   loginError.innerHTML = '';
 }
 
@@ -282,15 +289,13 @@ const init = () => {
 
   signInElem.addEventListener('click', event => {
     event.preventDefault();
-    if (loginForm.classList.contains('show')){
-      return;
+    if (loginForm.classList.contains('show-signup')) return;
+    if (loginForm.classList.contains('show-forgetpus')) return;
+    if (emailInput.value && passwordInput.value) {
+    setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
     } else {
-      if (emailInput.value && passwordInput.value) {
-      setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
-      } else {
-        loginError.innerHTML = 'введите логин и пароль';
-        return;
-      }
+      loginError.innerHTML = 'введите логин и пароль';
+      return;
     }
   });
   
@@ -305,9 +310,9 @@ const init = () => {
   
   loginSignUpElem.addEventListener('click', event => {
     event.preventDefault();
-    signInElem.setAttribute('type', "");
     loginError.innerHTML = '';
-    loginForm.classList.add('show');
+    signInElem.textContent = 'регистрация';
+    loginForm.classList.add('show-signup');
     loginTitile.textContent = 'Регистрация';
   });
   signUpCloseElem.addEventListener('click', event => {
@@ -316,6 +321,7 @@ const init = () => {
   });
   signUpElem.addEventListener('click', event => {
     event.preventDefault();
+    if (!loginForm.classList.contains('show-signup')) return;
     if (emailInput.value && passwordInput.value && passwordInputRepeat.value) {
     } else {
       loginError.innerHTML = 'заполните все поля';
@@ -335,13 +341,22 @@ const init = () => {
 
   loginForgetElem.addEventListener('click', event => {
     event.preventDefault();
+    loginError.innerHTML = '';
+    loginTitile.textContent = 'Восстановить пароль';
+    signInElem.textContent = 'отправить';
+    loginForm.classList.add('show-forgetpus');
+  });
+
+  forgetElem.addEventListener('click', event => {
+    event.preventDefault();
+    if (!loginForm.classList.contains('show-forgetpus')) return;
     if (emailInput.value) { 
-      setUsers.sendForget(emailInput.value)
+      setUsers.sendForget(emailInput.value);
     } else {
       loginError.innerHTML = 'для восстановления пароля введите email';
       return;
     }
-  });
+  })
   
   editElem.addEventListener('click', event => {
     event.preventDefault();
@@ -367,11 +382,11 @@ const init = () => {
     const { title, text, tags } = addPostElem.elements;
     console.log(title, text, tags);
     if (title.value.length < 6 ) {
-      showMessage('слишком короткий заголовок');
+      showMessage('Упсс.. слишком короткий заголовок');
       return;
     }
     if (text.value.length < 100 ) {
-      showMessage('слишком короткий текст');
+      showMessage('Упсс.. слишком короткий текст');
       return;
     }  
     setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
@@ -382,7 +397,7 @@ const init = () => {
     if (setUsers.user != null) {
       setPosts.addLikes(event)
     } else { 
-      showMessage('Пожауста выполните вход');
+      showMessage('Упсс.. пожалуйста выполните вход');
       return;
     }
   });
@@ -403,15 +418,13 @@ const init = () => {
   headerNav.addEventListener('click',  event => {
     event.preventDefault();
     if (setUsers.user == null) {
-      showMessage('Пожауста выполните вход');
+      showMessage('Упсс.. пожалуйста выполните вход');
     }
   });
 
   postsMobNav.addEventListener('click',  event => {
     event.preventDefault();
-    if (setUsers.user == null) {
-      showMessage('Пожауста выполните вход');
-    }
+    setUsers.user == null ? showMessage('Упсс.. пожалйуста выполните вход') : menu.classList.remove('visible');
   });
   
   setUsers.initUser(toggleAuthDom);

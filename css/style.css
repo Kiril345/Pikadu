@@ -318,7 +318,7 @@ body {
   display: none;
 }
 
-.show .signup-close, .show .login-password-repeat, .show .btn-signup{
+.show-signup .signup-close, .show-forgetpus .signup-close, .show-signup .login-password-repeat{
   display: block;
 }
 
@@ -331,7 +331,10 @@ body {
   font-style: italic;
   cursor: pointer;
 }
-.show .login-forget, .show .login-signup, .show .btn-signin{
+.show-signup .login-forget, .show-signup .login-signup{
+  display: none;
+}
+.show-forgetpus .login-password, .show-forgetpus .login-forget, .show-forgetpus .login-signup{
   display: none;
 }
 
@@ -390,6 +393,7 @@ body {
   height: 50px;
 }
 .user-name {
+  word-break: break-all;
   font-weight: 600;
   font-size: 16px;
   line-height: 24px;
@@ -607,28 +611,30 @@ body {
   margin-bottom: 16px;
   resize: none;
   outline: transparent;
+  word-break: break-all;
 }
-.error-title {
+.error-box {
   display: flex;
-  font-size: 16px;
+  font-size: 18px;
   align-items: center;
   justify-content: center;
-  color: #da13138a;
+  color: #ca804c;
   position: fixed;
   right: 0;
   left: 0;
   top: 0;
   bottom: 0;
   margin: auto;
-  height: 80px;
+  height: 100px;
   width: 300px;
-  background:rgb(232 215 215 / 98%);
+  background: #fff3b4;
   padding: 20px;
   border-radius: 5px;
   z-index: 999999;
+  box-shadow: 0 0 10px 5px rgba(221, 221, 221, 1);
 }
 .add-text {
-  min-height: 362px;
+  min-height: 290px;
 }
 .add-button {
   width: 100%;
@@ -637,9 +643,23 @@ body {
 .add-post .button-outline {
   margin-right: 1%;
 }
+@media (max-width: 1024px) {
+  .add-text {
+    min-height: 750px;
+  }
+  .edit, .user-avatar{
+    margin-right:10px;
+  }
+  .user{
+    padding: 15px;
+  }
+}
 @media (max-width: 990px) {
   .posts-menu{
     display:block;
+  }
+  .add-text {
+    min-height: 550px;
   }
   .menu-toggle {
     display: flex;
@@ -694,9 +714,8 @@ body {
   .posts, .add-post{
     width: 100%;
   }
-  .error-title{
-    width: 80%;
-    background:#e8d7d7;
+  .error-box{
+    width: 90%;
   }
   .sidebar {
     position: fixed;
@@ -745,12 +764,7 @@ body {
   }
 }
 @media (max-width: 676px) {
-  .add-buttons {
-    display: flex;
-    flex-direction: column;
-  }
   .add-button {
-    width: 100%;
     max-width: 100%;
   }
   .add-post .button-outline {
@@ -771,7 +785,17 @@ body {
   .post-author {
     margin-top: 15px;
   }
-  .add-button {
-    width: 100%;
+  .add-text {
+    min-height: 350px;
+  }
+}
+@media (max-width: 375px) {
+  .sidebar{
+    max-width: 100%;
+  }
+}
+@media (max-width: 325px) {
+  .add-text {
+    min-height: 250px;
   }
 }
