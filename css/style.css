@@ -793,8 +793,14 @@ body {
   .sidebar{
     max-width: 100%;
   }
+  .edit{
+    margin-right: 20px;
+  }
 }
 @media (max-width: 325px) {
+  .edit{
+    margin-right: 10px;
+  }
   .add-text {
     min-height: 250px;
   }
