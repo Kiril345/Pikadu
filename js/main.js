@@ -424,7 +424,7 @@ const init = () => {
 
   postsMobNav.addEventListener('click',  event => {
     event.preventDefault();
-    setUsers.user == null ? showMessage('Упсс.. пожалйуста выполните вход') : menu.classList.remove('visible');
+    setUsers.user == null ? showMessage('Упсс.. пожалйуста выполните вход') : showAllPosts(menu.classList.remove('visible'));
   });
   
   setUsers.initUser(toggleAuthDom);
