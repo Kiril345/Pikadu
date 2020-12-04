@@ -34,158 +34,160 @@
   </div>
 
   <header class="header">
-    <div class="error-text"></div>
-    <div class="header-wrapper">
-      <a href="#" class="header-logo">
-        <img class="header-logo-image" src="img/logo.svg" alt="logo: Pikadu">
-      </a>
-      <nav class="header-nav">
+    <div class="header-container">
+      <div class="error-text"></div>
+      <div class="header-wrapper">
+        <a href="#" class="header-logo">
+          <img class="header-logo-image" src="img/logo.svg" alt="logo: Pikadu">
+        </a>
+        <nav class="header-nav">
         <ul class="header-menu">
           <li class="header-menu-item"><a href="#" class="header-menu-link active">Свежее</a></li>
           <li class="header-menu-item"><a href="#" class="header-menu-link">Горячее</a></li>
           <li class="header-menu-item"><a href="#" class="header-menu-link">Подписки</a></li>
         </ul>
-        
-      </nav>
-
-      <div class="input-group search">
+        </nav>
+  
+        <div class="input-group search">
         <input type="search" class="search-input" placeholder="Поиск">
         <button class="search-button">
           <img src="img/search.svg" alt="icon: search" class="search-icon">
         </button>
+        </div>
+  
+        <a href="#" class="menu-toggle">
+        <span class="menu-toggle-line"></span>
+        <span class="menu-toggle-line"></span>
+        <span class="menu-toggle-line"></span>
+        </a>
       </div>
-
-      <a href="#" class="menu-toggle">
-        <span class="menu-toggle-line"></span>
-        <span class="menu-toggle-line"></span>
-        <span class="menu-toggle-line"></span>
-      </a>
     </div>
-
   </header>
 
   <div class="content">
-    <main class="posts">
-    </main>
-    <form action="#" class="add-post">
-      <input type="text" name="title"  class="add-title" autocomplete="off" placeholder="Заголовок поста">
-      <textarea name="text" class="add-text" autocomplete="off" placeholder="Текст вашего поста"></textarea>
-      <input type="text" name="tags" class="add-tags" autocomplete="off" placeholder="Добавьте теги через запятую">
-      <button type="submit" class="btn-primary add-button">
+    <div class="content-container">
+      <div class="content-wrapper">
+        <main class="posts">
+        </main>
+        <form action="#" class="add-post">
+        <input type="text" name="title"  class="add-title" autocomplete="off" placeholder="Заголовок поста">
+        <textarea name="text" class="add-text" autocomplete="off" placeholder="Текст вашего поста"></textarea>
+        <input type="text" name="tags" class="add-tags" autocomplete="off" placeholder="Добавьте теги через запятую">
+        <button type="submit" class="btn-primary add-button">
         <svg class="icon icon-fire">
           <use xlink:href="img/icons.svg#fire"></use>
         </svg>
           Опубликовать пост
-      </button>
-    </form>
-    <aside class="sidebar">
-      <div class="login">
-        <form  class="login-form">
-          <h2 class="login-title">Авторизация</h2>
-          <div class="login-error">
+        </button>
+        </form>
+        <aside class="sidebar">
+          <div class="login">
+            <form  class="login-form">
+              <h2 class="login-title">Авторизация</h2>
+              <div class="login-error">
+              </div>
+              <input type="email" class="login-input login-email" name="email" minlength="3" autocomplete="username" placeholder="введите свой email">
+              <input type="password" class="login-input login-password" name="pass" autocomplete="new-password" minlength="6" placeholder="введите свой пароль">
+              <input type="password" class="login-input login-password-repeat" name="repeat-pass" autocomplete="repeat-new-password" minlength="6" placeholder="введите пароль еще раз">
+              <span class="login-forget" title="введите свою почту и нажмите на это поле">Забыли пароль?</span>
+              <button class="btn-secondary btn-signin btn-forget" id="btn-signup" type="submit" >Войти</button>
+              <span class="login-signup">Регистрация</span>
+              <button class="signup-close">&times;</button>
+            </form>
+          </div> 
+          <div class="user">
+            <div class="user-container">
+              <a href="#" class="user-info">
+                <img src="" alt="photo: user" class="user-avatar">
+                <span class="user-name"></span>
+              </a>
+    
+              <a href="#" class="edit">
+                <span class="icon icon-edit">
+              </a>
+    
+              <a href="#" class="exit">
+                <svg class="icon icon-exit">
+                  <use xlink:href="img/icons.svg#exit"></use>
+                </svg>
+              </a>
+            </div>
+
+            <form class="edit-container">
+              <h2 class="edit-title">Редактировать</h2>
+              <label for="" class="edit-label" >Ваш логин
+                <input type="text" 
+                  class="edit-input edit-username" 
+                  name="username" 
+                  minlength="3" 
+                  placeholder="логин" 
+                  required >
+              </label>
+  
+              <label for="" class="edit-label">Ваше фото
+                <input type="text" 
+                  class="edit-input edit-photo" 
+                  name="photo" 
+                  placeholder="ссылка на ваше фото">
+              </label>
+              <button class="btn-secondary edit-btn" type="submit">Сохранить</button> 
+            </form>
           </div>
-          <input type="email" class="login-input login-email" name="email" minlength="3" autocomplete="username" placeholder="введите свой email">
-          <input type="password" class="login-input login-password" name="pass" autocomplete="new-password" minlength="6" placeholder="введите свой пароль">
-          <input type="password" class="login-input login-password-repeat" name="repeat-pass" autocomplete="repeat-new-password" minlength="6" placeholder="введите пароль еще раз">
-          <span class="login-forget" title="введите свою почту и нажмите на это поле">Забыли пароль?</span>
-          <button class="btn-secondary btn-signin btn-forget" id="btn-signup" type="submit" >Войти</button>
-          <span class="login-signup">Регистрация</span>
-          <button class="signup-close">&times;</button>
-        </form>
-      </div> 
-      <div class="user">
-        <div class="user-container">
-          <a href="#" class="user-info">
-            <img src="" alt="photo: user" class="user-avatar">
-            <span class="user-name"></span>
+
+          <nav class="sidebar-nav">
+            <ul class="sidebar-menu">
+              <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">Ответы</a>
+              </li>
+              <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link active">Комментарии</a>
+              </li>
+              <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">Оценки</a>
+              </li>
+              <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">Сохраненное </a>
+              </li>
+              <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">Подписки</a>
+              </li>
+              <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">Заметки</a>
+              </li>
+              <li class="sidebar-menu-item">
+                <a href="#" class="sidebar-menu-link">Игнор-лист</a>
+              </li>
+            </ul>
+          </nav>
+
+          <a href="#" class="btn-primary new-post-btn">
+            <svg class="icon icon-fire">
+              <use xlink:href="img/icons.svg#fire"></use>
+            </svg>Добавить пост
           </a>
 
-          <a href="#" class="edit">
-            <span class="icon icon-edit">
-          </a>
+          <div class="posts-menu">
+            <ul class="posts-menu-list">
+              <li class="menu-posts-item">Свежее</li>
+              <li class="menu-posts-item">Горячее</li>
+              <li class="menu-posts-item">Подписки</li>
+            </ul>
+          </div>
 
-          <a href="#" class="exit">
-            <svg class="icon icon-exit">
-              <use xlink:href="img/icons.svg#exit"></use>
-            </svg>
-          </a>
-        </div>
-
-        <form class="edit-container">
-          <h2 class="edit-title">Редактировать</h2>
-          <label for="" class="edit-label" >Ваш логин
-            <input type="text" 
-              class="edit-input edit-username" 
-              name="username" 
-              minlength="3" 
-              placeholder="логин" 
-              required >
-          </label>
-
-          <label for="" class="edit-label">Ваше фото
-            <input type="text" 
-              class="edit-input edit-photo" 
-              name="photo" 
-              placeholder="ссылка на ваше фото">
-          </label>
-          <button class="btn-secondary edit-btn" type="submit">Сохранить</button> 
-        </form>
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Комментарий дня</h2>
+            </div>
+            <div class="card-body">
+              <a href="#" class="card-body-title">Как обмануть банкомат, если вы хотите снять больше наличных</a>
+              <p class="card-text">Таким образом укрепление и развитие структуры требуют от нас анализа форм развития. Не следует, однако забывать, что реализация намеченных плановых заданий требуют от нас анализа позиций, занимаемых участниками в отношении поставленных
+              задач. Задача организации, в особенности же консультация...</p>
+            </div>
+          </div>
+          <a href="#" class="advertising"></a>
+        </aside>
       </div>
-
-      <nav class="sidebar-nav">
-        <ul class="sidebar-menu">
-          <li class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link">Ответы</a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link active">Комментарии</a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link">Оценки</a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link">Сохраненное </a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link">Подписки</a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link">Заметки</a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link">Игнор-лист</a>
-          </li>
-        </ul>
-      </nav>
-
-      <a href="#" class="btn-primary new-post-btn">
-        <svg class="icon icon-fire">
-          <use xlink:href="img/icons.svg#fire"></use>
-        </svg>
-        Добавить пост
-      </a>
-
-      <div class="posts-menu">
-        <ul class="posts-menu-list">
-          <li class="menu-posts-item">Свежее</li>
-          <li class="menu-posts-item">Горячее</li>
-          <li class="menu-posts-item">Подписки</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">Комментарий дня</h2>
-        </div>
-
-        <div class="card-body">
-          <a href="#" class="card-body-title">Как обмануть банкомат, если вы хотите снять больше наличных</a>
-          <p class="card-text">Таким образом укрепление и развитие структуры требуют от нас анализа форм развития. Не следует, однако забывать, что реализация намеченных плановых заданий требуют от нас анализа позиций, занимаемых участниками в отношении поставленных
-          задач. Задача организации, в особенности же консультация...</p>
-        </div>
-      </div>
-      <a href="#" class="advertising"></a>
-    </aside>
+    </div>
   </div>
 </body>
 </html>
