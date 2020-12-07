@@ -202,7 +202,7 @@ const showAllPosts = () => { //ренедерим все посты
   let postsHTML = '';
   setPosts.allPosts.forEach(function({id, title, text, tags, author, date, like, likesUsers, comments}) {
   let iconLike = (likesUsers.find(item => item == user.uid)) ? "icon-like" : "";
-  postsHTML = `
+  postsHTML += `
   <section class="post" id=${id}>
     <div class="post-body">
       <div class="post-author">
@@ -246,8 +246,8 @@ const showAllPosts = () => { //ренедерим все посты
       </div>
     </div>
   </section>`
-  postsWrapper.insertAdjacentHTML('beforeend', postsHTML);
   });
+  postsWrapper.insertAdjacentHTML('beforeend', postsHTML);
   addPostElem.classList.remove('visible');
   postsWrapper.classList.remove('hide');
 };

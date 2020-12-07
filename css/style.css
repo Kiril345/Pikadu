@@ -41,6 +41,7 @@ body {
   -webkit-text-size-adjust: none;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-user-select: none;
+  background: #cecece;
 }
 .header {
   position: fixed;
@@ -134,7 +135,6 @@ body {
 }
 .content{
   width: 100%;
-  background: #e5e5e5;
 }
 .content-wrapper{
   padding-top: 94px;
